@@ -14,16 +14,29 @@ def h_PI(mdp, h=1, tolerance=TOLERANCE):
         Vs.append(V)
         i += 1
         if np.allclose(Vs[-1], Vs[-2], tolerance): break
+    print(f'Reached convergence in {len(Vs)} iterations.')
     return policy, V
 
 
-def NC_hm_PI(mdp, h=1, m=1, tolerance=TOLERANCE, max_calls=None):
-    pass
+def NC_hm_PI(mdp, h = 1, m = 1, tolerance = TOLERANCE, max_calls=None):
+    Vs = [mdp.V]
+    while True:
+        policy, V = mdp.utils.get_hm_greedy_policy(Vs[-1], h , m)
+        Vs.append(V)
+        if np.allclose(Vs[-1], Vs[-2], tolerance): break
+        if max_calls is not None and mdp.n_calls >= max_calls: return policy, V
+    print(f'Reached convergence in {len(Vs)} iterations.')
+    return policy, V
 
-
-def hm_PI(mdp, h=1, m=1, tolerance=TOLERANCE, max_calls=None):
-    pass
-
+def hm_PI(mdp, h = 1, m = 1, tolerance = TOLERANCE, max_calls=None):
+    Vs = [mdp.V]
+    while True:
+        policy, V = mdp.utils.get_hm_greedy_policy(Vs[-1], h , m)
+        Vs.append(V)
+        if np.allclose(Vs[-1], Vs[-2], tolerance): break
+        if max_calls is not None and mdp.n_calls >= max_calls: return policy, V
+    print(f'Reached convergence in {len(Vs)} iterations.')
+    return policy, V
 
 def NC_h_lambda_PI(mdp, h=1, lda=1, error_range=None, tolerance=TOLERANCE, max_calls=None):
     Vs = [mdp.V]
@@ -34,6 +47,7 @@ def NC_h_lambda_PI(mdp, h=1, lda=1, error_range=None, tolerance=TOLERANCE, max_c
         Vs.append(V)
         if np.allclose(Vs[-1], Vs[-2], tolerance): break
         if max_calls is not None and mdp.n_calls >= max_calls: return policy, V
+    print(f'Reached convergence in {len(Vs)} iterations.')
     return policy, V
 
 
@@ -46,4 +60,5 @@ def h_lambda_PI(mdp, h=1, lda=1, error_range=None, tolerance=TOLERANCE, max_call
         i += 1
         if np.allclose(Vs[-1], Vs[-2], tolerance): break
         if max_calls is not None and mdp.n_calls >= max_calls: return policy, V
+    print(f'Reached convergence in {len(Vs)} iterations.')
     return policy, V

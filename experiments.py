@@ -13,7 +13,7 @@ def parse_args():
     parser.add_argument("--algo_type", type=str, choices=['lambda', 'm'], default='lambda')
     parser.add_argument("--mdp_size", type=int, default=10)
     parser.add_argument("--h_values", help='Range of values for h (start, stop, n_step)', type=int, nargs=3, default=[1,20,20])
-    parser.add_argument("--m_values", help='Range of values for m (start, stop, n_step)', type=int, nargs=3, default=[1,20,20])
+    parser.add_argument("--m_values", help='Range of values for m (start, stop, n_step)', type=int, nargs=3, default=[0,20,21])
     parser.add_argument("--lambda_values", help='Range of values for lambda (start, stop, step)',  type=float, nargs=3, default=[0., 1., 21])
     parser.add_argument("--max_calls", type=int, default=4e6)
     parser.add_argument("--n_runs", type=int, default=10)
