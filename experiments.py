@@ -24,9 +24,9 @@ def parse_args():
     args = parser.parse_args()
 
     if args.algo_type == 'lambda':
-        args.algorithms = ['h_lambda_PI', 'NC_h_lambda_PI']
+        args.algorithms = ['NC_h_lambda_PI', 'h_lambda_PI']
     else:
-        args.algorithms = ['hm_PI', 'NC_hm_PI']
+        args.algorithms = ['NC_hm_PI', 'hm_PI']
 
     args.h_values = np.linspace(args.h_values[0], args.h_values[1], args.h_values[2]).astype(int).tolist()
     args.m_values = np.linspace(args.m_values[0], args.m_values[1], args.m_values[2]).astype(int).tolist()
@@ -47,6 +47,7 @@ def plot_heatmaps(values, title, fname, args):
         axes[i].set_xlabel(f'{args.algo_type}')
         axes[i].set_ylabel('h')
 
+        axes[i].set_yscale('log')
         axes[i].set_yticks(range(len(args.h_values)))
         axes[i].set_yticklabels([f"{h:d}" for h in np.flip(args.h_values)])
 
