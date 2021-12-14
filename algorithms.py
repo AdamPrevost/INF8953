@@ -21,7 +21,7 @@ def h_PI(mdp, h=1, tolerance=TOLERANCE):
 def NC_hm_PI(mdp, h = 1, m = 1, tolerance = TOLERANCE, max_calls=None):
     Vs = [mdp.V]
     while True:
-        policy, V = mdp.utils.get_hm_greedy_policy(Vs[-1], h , m)
+        policy, V = mdp.utils.get_NC_hm_greedy_policy(Vs[-1], h , m)
         Vs.append(V)
         if np.allclose(Vs[-1], Vs[-2], tolerance): break
         if max_calls is not None and mdp.n_calls >= max_calls: return policy, V

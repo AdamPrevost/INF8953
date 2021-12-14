@@ -243,9 +243,9 @@ class MDP_Utils:
     def NC_bellman_m_operator(self, V, m, policy, update_n_calls = True, error_range=None):
         for i in range(m):
             V = self.bellman_operator(V, update_n_calls, policy=policy)
-        # if error_range is not None:
-        #     i, j = V.shape
-        #     V += np.random.uniform(-error_range, error_range, (i, j))
+        if error_range is not None:
+            i, j = V.shape
+            V += np.random.uniform(-error_range, error_range, (i, j))
         return V
 
     def bellman_m_operator(self, V, m, h, policy, update_n_calls = True, error_range=None):
