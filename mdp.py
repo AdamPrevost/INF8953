@@ -240,6 +240,20 @@ class MDP_Utils:
         V = np.max(R + self.mdp.discount_factor * Pv, 1)
         return V
 
+    def NC_bellman_m_operator(self, V, m, policy, update_n_calls = True, error_range=None):
+        for i in range(m):
+            V = self.bellman_operator(V, update_n_calls, policy=policy)
+        if error_range is not None:
+            i, j = V.shape
+            V += np.random.uniform(-error_range, error_range, (i, j))
+        return V
+
+    def bellman_m_operator(self, V, m, h, policy, update_n_calls = True, error_range=None):
+        for i in range(h - 1):
+            V = self.bellman_optimality_operator(V, update_n_calls)
+        V = self.NC_bellman_m_operator(V, m, policy, update_n_calls, error_range)
+        return V
+
     def NC_bellman_λ_operator(self, V, lda, policy, update_n_calls=True, error_range=None):
         P = self.get_bellman_transition_kernel(policy)
         old_v = V.copy()
@@ -273,6 +287,16 @@ class MDP_Utils:
         best_actions = np.argmax(Vs, 1)
         policy = self.actions_to_greedy_policy(best_actions)
         return policy
+
+    def get_NC_hm_greedy_policy(self, V, h = 1, m = 1, update_n_calls = True, error_range=None):
+        policy = self.get_h_greedy_policy(V, h, update_n_calls)
+        V = self.NC_bellman_m_operator(V, m, policy, update_n_calls, error_range)
+        return policy, V
+
+    def get_hm_greedy_policy(self, V, h = 1, m = 1, update_n_calls = True, error_range=None):
+        policy = self.get_h_greedy_policy(V, h, update_n_calls)
+        V = self.bellman_m_operator(V, m, h, policy, update_n_calls, error_range)
+        return policy, V
 
     def get_NC_lambda_greedy_policy(self, V, lda=1, h=1, update_n_calls=True, error_range=None):
         policy = self.get_h_greedy_policy(V, h, update_n_calls)
