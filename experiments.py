@@ -1,4 +1,5 @@
 import argparse
+import json
 import matplotlib.pyplot as plt
 import os
 
@@ -14,10 +15,10 @@ def parse_args():
     parser.add_argument("--mdp_size", type=int, default=10)
     parser.add_argument("--h_values", help='Range of values for h (start, stop, n_step)', type=int, nargs=3, default=[1,20,20])
     parser.add_argument("--m_values", help='Range of values for m (start, stop, n_step)', type=int, nargs=3, default=[1,20,20])
-    parser.add_argument("--lambda_values", help='Range of values for lambda (start, stop, step)',  type=float, nargs=3, default=[0., 1., 21])
+    parser.add_argument("--lambda_values", help='Range of values for lambda (start, stop, step)',  type=float, nargs=3, default=[0., 1., 3])
     parser.add_argument("--max_calls", type=int, default=4e6)
     parser.add_argument("--n_runs", type=int, default=10)
-    parser.add_argument("--error_range", type=float,)
+    parser.add_argument("--error_range", type=float, default=0.3)
     parser.add_argument('--save_folder', type=str, default=None)
 
     args = parser.parse_args()
@@ -27,9 +28,9 @@ def parse_args():
     else:
         args.algorithms = ['hm_PI', 'NC_hm_PI']
 
-    args.h_values = np.linspace(args.h_values[0], args.h_values[1], args.h_values[2]).astype(int)
-    args.m_values = np.linspace(args.m_values[0], args.m_values[1], args.m_values[2]).astype(int)
-    args.lambda_values = np.linspace(args.lambda_values[0], args.lambda_values[1], args.lambda_values[2])
+    args.h_values = np.linspace(args.h_values[0], args.h_values[1], args.h_values[2]).astype(int).tolist()
+    args.m_values = np.linspace(args.m_values[0], args.m_values[1], args.m_values[2]).astype(int).tolist()
+    args.lambda_values = np.linspace(args.lambda_values[0], args.lambda_values[1], args.lambda_values[2]).tolist()
 
     return args
 
@@ -139,6 +140,11 @@ if __name__ == '__main__':
             os.makedirs(args.save_folder)
         elif not os.path.isdir(args.save_folder):
             raise IOError('Provided save folder is not a proper directory.')
+        elif len(os.listdir(args.save_folder)):
+            raise IOError('Provided save folder is not empty.')
+
+        with open(os.path.join(args.save_folder, 'args.json'), 'w') as f:
+            json.dump(vars(args), f)
 
     convergence_time(args)
     noisy_performance(args)
